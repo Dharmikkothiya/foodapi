@@ -9,20 +9,40 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    // public function up()
+    // {
+    //     Schema::table('posts', function (Blueprint $table) {
+    //         $table->text('content')->nullable(); // Add nullable if it’s optional
+    //     });
+    // }
+
+    // /**
+    //  * Reverse the migrations.
+    //  */
+    // public function down()
+    // {
+    //     Schema::table('posts', function (Blueprint $table) {
+    //         $table->dropColumn('content');
+    //     });
+    // }
+    public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->text('content')->nullable(); // Add nullable if it’s optional
+            if (!Schema::hasColumn('posts', 'content')) {
+                $table->text('content')->nullable();
+            }
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->dropColumn('content');
+            if (Schema::hasColumn('posts', 'content')) {
+                $table->dropColumn('content');
+            }
         });
     }
 };
