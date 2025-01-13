@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
 
 class RestaurantController extends Controller
@@ -12,7 +13,7 @@ class RestaurantController extends Controller
      */
     public function index()
     {
-        //
+        return Restaurant::all();
     }
 
     /**
@@ -20,7 +21,15 @@ class RestaurantController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'Name' => 'required|string|max:100',
+            'Intro' => 'nullable|string',
+            'Rate' => 'nullable|numeric|min:0|max:5',
+            'PhotosURL' => 'nullable|string',
+            'AddressID' => 'required|integer',
+        ]);
+
+        return Restaurant::create($validated);
     }
 
     /**
@@ -28,7 +37,7 @@ class RestaurantController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return Restaurant::findOrFail($id);
     }
 
     /**
@@ -36,7 +45,18 @@ class RestaurantController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $restaurant = Restaurant::findOrFail($id);
+
+        $validated = $request->validate([
+            'Name' => 'nullable|string|max:100',
+            'Intro' => 'nullable|string',
+            'Rate' => 'nullable|numeric|min:0|max:5',
+            'PhotosURL' => 'nullable|string',
+            'AddressID' => 'nullable|integer',
+        ]);
+
+        $restaurant->update($validated);
+        return $restaurant;
     }
 
     /**
@@ -44,6 +64,9 @@ class RestaurantController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $restaurant = Restaurant::findOrFail($id);
+        $restaurant->delete();
+
+        return response()->json(['message' => 'Restaurant deleted successfully'], 200);
     }
 }

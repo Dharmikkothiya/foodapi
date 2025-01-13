@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('favorite_food', function (Blueprint $table) {
-            $table->id();
+        Schema::create('favorite_foods', function (Blueprint $table) {
+            $table->id('FavoriteFoodListID');
+            $table->unsignedBigInteger('UserID');
+            $table->unsignedBigInteger('FoodID');
+            $table->foreign('UserID')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('FoodID')->references('FoodID')->on('foods')->onDelete('cascade');
             $table->timestamps();
         });
     }

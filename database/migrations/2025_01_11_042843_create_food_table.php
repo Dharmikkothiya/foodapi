@@ -11,8 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('food', function (Blueprint $table) {
-            $table->id();
+        Schema::create('foods', function (Blueprint $table) {
+            $table->id('FoodID');
+            $table->string('Name', 100);
+            $table->text('Details')->nullable();
+            $table->float('Rate', 3, 2)->default(0);
+            $table->string('Size', 20)->nullable();
+            $table->decimal('Price', 10, 2);
+            $table->text('IngredientsListID')->nullable();
+            $table->unsignedBigInteger('CategoryID');
+            $table->unsignedBigInteger('RestaurantID');
+            $table->foreign('CategoryID')->references('CategoryID')->on('food_categories')->onDelete('cascade');
+            $table->foreign('RestaurantID')->references('RestaurantID')->on('restaurants')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('food_categories', function (Blueprint $table) {
-            $table->id();
+            $table->id('CategoryID');
+            $table->string('Name', 50);
+            $table->unsignedBigInteger('RestaurantID');
+            $table->foreign('RestaurantID')->references('RestaurantID')->on('restaurants')->onDelete('cascade');
             $table->timestamps();
         });
     }

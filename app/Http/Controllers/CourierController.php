@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Courier;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class CourierController extends Controller
      */
     public function index()
     {
-        //
+        return Courier::with('chat')->get();
     }
 
     /**
@@ -20,7 +21,14 @@ class CourierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'Name' => 'required|string|max:100',
+            'ProfilePhotoURL' => 'nullable|string|max:255',
+            'PhoneNumber' => 'required|string|max:15',
+            'ChatID' => 'nullable|exists:chats,ChatID',
+        ]);
+
+        return Courier::create($validated);
     }
 
     /**
@@ -28,7 +36,7 @@ class CourierController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return Courier::with('chat')->findOrFail($id);
     }
 
     /**
@@ -36,7 +44,17 @@ class CourierController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $courier = Courier::findOrFail($id);
+
+        $validated = $request->validate([
+            'Name' => 'nullable|string|max:100',
+            'ProfilePhotoURL' => 'nullable|string|max:255',
+            'PhoneNumber' => 'nullable|string|max:15',
+            'ChatID' => 'nullable|exists:chats,ChatID',
+        ]);
+
+        $courier->update($validated);
+        return $courier;
     }
 
     /**
@@ -44,6 +62,9 @@ class CourierController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $courier = Courier::findOrFail($id);
+        $courier->delete();
+
+        return response()->json(['message' => 'Courier deleted successfully'], 200);
     }
 }

@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('couriers', function (Blueprint $table) {
-            $table->id();
+            $table->id('CourierID');
+            $table->string('Name', 100);
+            $table->string('ProfilePhotoURL', 255);
+            $table->string('PhoneNumber', 15);
+            $table->unsignedBigInteger('ChatID')->nullable();
+            $table->foreign('ChatID')->references('ChatID')->on('chats')->onDelete('set null');
             $table->timestamps();
         });
     }

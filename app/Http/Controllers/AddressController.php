@@ -14,7 +14,13 @@ class AddressController extends Controller
     public function index()
     {
         $addresses = Address::with('user')->get();
-        return response()->json($addresses, 200);
+        // $addresses = Address::get();
+    
+        // return response()->json($addresses, 200);
+        return response()->json([
+            'message'=>'List of posts',
+            'posts'=> $addresses
+          ],200);
     }
 
     /**
@@ -33,6 +39,7 @@ class AddressController extends Controller
         ]);
 
         $address = Address::create($validatedData);
+        // $address->save();
         return response()->json($address, 201);
     }
 

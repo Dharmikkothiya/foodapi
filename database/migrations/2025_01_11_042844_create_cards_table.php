@@ -12,7 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cards', function (Blueprint $table) {
-            $table->id();
+            $table->id('CardID');
+            $table->string('CardTagType', 50);
+            $table->unsignedBigInteger('UserID');
+            $table->string('CardHolderName', 100);
+            $table->string('CardNumber', 16)->unique();
+            $table->date('ExpireDate');
+            $table->integer('CVC');
+            $table->foreign('UserID')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -12,7 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
+            $table->id('OrderID');
+            $table->unsignedBigInteger('UserID');
+            $table->unsignedBigInteger('RestaurantID');
+            $table->unsignedBigInteger('AddressID');
+            $table->unsignedBigInteger('CourierID')->nullable();
+            $table->decimal('TotalPrice', 10, 2);
+            $table->time('DeliveryTime');
+            $table->decimal('DeliveryPrice', 10, 2);
+            $table->time('ExpectedTime');
+            $table->enum('OrderStatus', ['Complete', 'Cancel', 'Receive', 'On the Way']);
+            $table->timestamp('OrderedAt')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->foreign('UserID')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('RestaurantID')->references('RestaurantID')->on('restaurants')->onDelete('cascade');
+            $table->foreign('AddressID')->references('AddressID')->on('addresses')->onDelete('cascade');
             $table->timestamps();
         });
     }

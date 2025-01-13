@@ -12,7 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('chats', function (Blueprint $table) {
-            $table->id();
+            $table->id('ChatID');
+            $table->unsignedBigInteger('ChatConnectorID');
+            $table->unsignedBigInteger('UserID')->nullable();
+            $table->unsignedBigInteger('CourierID')->nullable();
+            $table->unsignedBigInteger('RestaurantID')->nullable();
+            $table->text('MessageListID');
+            $table->timestamp('MessageTime')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->foreign('UserID')->references('UserID')->on('users')->onDelete('cascade');
+            $table->foreign('CourierID')->references('CourierID')->on('couriers')->onDelete('cascade');
+            $table->foreign('RestaurantID')->references('RestaurantID')->on('restaurants')->onDelete('cascade');
             $table->timestamps();
         });
     }

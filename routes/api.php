@@ -27,7 +27,7 @@ Route::prefix('v1')->group(function(){
     // Route::delete('posts/{post}',[PostController::class,'destroy']);
    Route::apiResource('posts',PostController::class);
    Route::apiResource('users', UserController::class);
-Route::apiResource('addresses', AddressController::class);
+   Route::apiResource('addresses', AddressController::class);
 Route::apiResource('restaurants', RestaurantController::class);
 Route::apiResource('food-categories', FoodCategoryController::class);
 Route::apiResource('foods', FoodController::class);

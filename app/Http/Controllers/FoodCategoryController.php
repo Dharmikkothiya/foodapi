@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\FoodCategory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -12,7 +12,7 @@ class FoodCategoryController extends Controller
      */
     public function index()
     {
-        //
+        return FoodCategory::with('restaurant')->get();
     }
 
     /**
@@ -20,7 +20,12 @@ class FoodCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'Name' => 'required|string|max:50',
+            'RestaurantID' => 'required|exists:restaurants,RestaurantID',
+        ]);
+
+        return FoodCategory::create($validated);
     }
 
     /**
@@ -28,7 +33,7 @@ class FoodCategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return FoodCategory::with('restaurant')->findOrFail($id);
     }
 
     /**
@@ -36,7 +41,15 @@ class FoodCategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $category = FoodCategory::findOrFail($id);
+
+        $validated = $request->validate([
+            'Name' => 'nullable|string|max:50',
+            'RestaurantID' => 'nullable|exists:restaurants,RestaurantID',
+        ]);
+
+        $category->update($validated);
+        return $category;
     }
 
     /**
@@ -44,6 +57,9 @@ class FoodCategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = FoodCategory::findOrFail($id);
+        $category->delete();
+
+        return response()->json(['message' => 'Food Category deleted successfully'], 200);
     }
 }
